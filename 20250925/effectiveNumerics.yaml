@@ -1,0 +1,13 @@
+solver:
+  grid:
+    mechanical:
+      update_gamma: false               # update Gamma-operator with current dPdF (not possible if FFT: memory_efficient == true)
+      #PETSc_options: -snes_type ngmres -snes_ngmres_restart_type difference -snes_ngmres_restart_it 30 -snes_linesearch_type l2  # PETSc solver options
+      PETSc_options: -snes_type anderson -snes_linesearch_type l2 -snes_anderson_m 30 -snes_anderson_beta 1.0 -snes_rtol 1e-6
+
+    FFT:
+      memory_efficient: false            # precalculate Gamma-operator (81 doubles per point)
+      divergence_correction: size+grid  # use size-independent divergence criterion {none, size, size+grid}
+      derivative: continuous       # approximation used for derivatives in Fourier space {continuous, central_difference, FWBW_difference}
+      FFTW_plan_mode: FFTW_MEASURE      # planning-rigor flags, see manual at https://www.fftw.org/fftw3_doc/Planner-Flags.html
+      FFTW_timelimit: -1.0              # time limit of plan creation for FFTW, see manual on www.fftw.org. (-1.0: disable time limit)
